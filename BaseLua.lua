@@ -654,11 +654,105 @@ function KiwiLibrary:CreateWindow(config)
 				end)
 			end
 		end
+		-- COMPONENTE: TEXTBOX (Entrada de texto)
+		function TabElements:CreateTextbox(name, placeholder, callback)
+			local callback = callback or function() end
+			
+			local BoxFrame = Instance.new("Frame")
+			BoxFrame.Parent = TabPage
+			BoxFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 40)
+			BoxFrame.Size = UDim2.new(1, -10, 0, 45)
+			Instance.new("UICorner", BoxFrame).CornerRadius = UDim.new(0, 6)
+			
+			local BTitle = Instance.new("TextLabel")
+			BTitle.Parent = BoxFrame
+			BTitle.BackgroundTransparency = 1
+			BTitle.Position = UDim2.new(0, 15, 0, 0)
+			BTitle.Size = UDim2.new(1, -30, 1, 0)
+			BTitle.Font = Enum.Font.MontserratBold
+			BTitle.Text = name
+			BTitle.TextColor3 = Color3.fromRGB(220, 220, 220)
+			BTitle.TextSize = 13
+			BTitle.TextXAlignment = Enum.TextXAlignment.Left
+			
+			local InputBox = Instance.new("TextBox")
+			InputBox.Parent = BoxFrame
+			InputBox.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+			InputBox.Position = UDim2.new(1, -130, 0.5, -12)
+			InputBox.Size = UDim2.new(0, 120, 0, 25)
+			InputBox.Font = Enum.Font.Montserrat
+			InputBox.PlaceholderText = placeholder
+			InputBox.Text = ""
+			InputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+			InputBox.TextSize = 12
+			Instance.new("UICorner", InputBox).CornerRadius = UDim.new(0, 4)
+			
+			InputBox.FocusLost:Connect(function(enterPressed)
+				if enterPressed then
+					pcall(callback, InputBox.Text)
+				end
+			end)
+		end
 
-		return TabElements
+		-- COMPONENTE: KEYBIND (Asignar tecla)
+		function TabElements:CreateKeybind(name, default, callback)
+			local callback = callback or function() end
+			local binding = false
+			local currentKey = default or Enum.KeyCode.RightControl
+			
+			local KBindFrame = Instance.new("TextButton")
+			KBindFrame.Parent = TabPage
+			KBindFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 40)
+			KBindFrame.Size = UDim2.new(1, -10, 0, 38)
+			KBindFrame.AutoButtonColor = false
+			KBindFrame.Text = ""
+			Instance.new("UICorner", KBindFrame).CornerRadius = UDim.new(0, 6)
+			
+			local KTitle = Instance.new("TextLabel")
+			KTitle.Parent = KBindFrame
+			KTitle.BackgroundTransparency = 1
+			KTitle.Position = UDim2.new(0, 15, 0, 0)
+			KTitle.Size = UDim2.new(1, -60, 1, 0)
+			KTitle.Font = Enum.Font.MontserratBold
+			KTitle.Text = name
+			KTitle.TextColor3 = Color3.fromRGB(220, 220, 220)
+			KTitle.TextSize = 13
+			KTitle.TextXAlignment = Enum.TextXAlignment.Left
+			
+			local KeyLabel = Instance.new("TextLabel")
+			KeyLabel.Parent = KBindFrame
+			KeyLabel.BackgroundColor3 = Color3.fromRGB(25, 25, 28)
+			KeyLabel.Position = UDim2.new(1, -85, 0.5, -12)
+			KeyLabel.Size = UDim2.new(0, 75, 0, 25)
+			KeyLabel.Font = Enum.Font.MontserratBold
+			KeyLabel.Text = currentKey.Name
+			KeyLabel.TextColor3 = Color3.fromRGB(74, 222, 128)
+			KeyLabel.TextSize = 12
+			Instance.new("UICorner", KeyLabel).CornerRadius = UDim.new(0, 4)
+			
+			KBindFrame.MouseButton1Click:Connect(function()
+				binding = true
+				KeyLabel.Text = "..."
+			end)
+			
+			UserInputService.InputBegan:Connect(function(input, gameProcessed)
+				if binding then
+					if input.UserInputType == Enum.UserInputType.Keyboard then
+						currentKey = input.KeyCode
+						KeyLabel.Text = currentKey.Name
+						binding = false
+					end
+				elseif input.KeyCode == currentKey and not gameProcessed then
+					pcall(callback)
+				end
+			end)
+		end
 	end
 
-	return WindowObj
+	return TabElements
+end
+
+return WindowObj
 end
 
 return KiwiLibrary
