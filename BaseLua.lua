@@ -653,7 +653,6 @@ function KiwiLibrary:CreateWindow(config)
 					pcall(callback, option)
 				end)
 			end
-		end
 		-- COMPONENTE: TEXTBOX (Entrada de texto)
 		function TabElements:CreateTextbox(name, placeholder, callback)
 			local callback = callback or function() end
