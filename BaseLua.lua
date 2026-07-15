@@ -748,10 +748,11 @@ function KiwiLibrary:CreateWindow(config)
 		end
 	end
 
-	return TabElements
-end
+-- Al final de tu función CreateTab, asegúrate de que cierre así:
+        end
+        return TabElements
+    end
 
-return WindowObj
+    -- Y al final de todo el script de la librería, debe estar solo esto:
+    return KiwiLibrary
 end
-
-return KiwiLibrary
