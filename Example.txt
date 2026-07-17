@@ -1,4 +1,4 @@
-local KiwiUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/48e0/Kiwi.xyz/refs/heads/main/KiwiXYZ.lua"))()
+local KiwiUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/JstKiwi/Kiwi.xyz/refs/heads/main/KiwiXYZ.lua"))()
 local Window = KiwiUI:CreateWindow()
 
 local TabInicio = Window:CreateTab("Inicio", "Home")
